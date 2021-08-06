@@ -93,7 +93,7 @@ void loop()
     int sound_value = analogRead(sensor);
     Serial.println(sound_value);
 //    
-   delay(1000);
+//   delay(1000);/
   /*get the sensoring value of temprature and humidity*/
   
   float humidity = dht.readHumidity();                                 // Read Humidity
@@ -117,7 +117,7 @@ void loop()
  
     checkForSound(sound_value);
 
-   ReadfromFirebase();
+     ReadfromFirebase();
  
     checkForTempartureandHumidity(temperature,humidity);
     
@@ -125,6 +125,8 @@ void loop()
     uploadDataToServer(fireHumid,fireTemp,Sound_Detection);
 
     ReadfromFirebase();
+
+    delay(1000);
   
 
 
@@ -145,13 +147,15 @@ void ReadfromFirebase(){
   }else if(motor_status == "OFF"){
     digitalWrite(realyInput_motor,LOW);
     
-  }else if (Fun_status == "ON"){
+  }
+  if (Fun_status == "ON"){
     digitalWrite(realyInput_fun,HIGH);
     
-  }else if (Fun_status == "OFF"){
+  }else if(Fun_status == "OFF"){
      digitalWrite(realyInput_fun,LOW);
      
-  }else if (Music_status == "ON"){
+  }
+  if (Music_status == "ON"){
      digitalWrite(realyInput_music,HIGH);
      
   }else if (Music_status == "OFF"){
@@ -197,6 +201,13 @@ void checkForSound(int sound_value){
 
             Sound_Detection ="ON";
   }else if(sound_value <STH){
+        Serial.println("swing Motor Turned OFF");
+            Firebase.setString("/Motor", "OFF");
+            
+            Serial.println("Music toy Turned OFF");
+            Firebase.setString("/Music", "OFF");
+
+    
     Sound_Detection ="OFF";
   }
   
@@ -221,11 +232,11 @@ void checkForTempartureandHumidity(float temperature,float humidity){
             Serial.println("Fun Turned OFF");
             Firebase.setString("/Fan", "OFF");
             
-            Serial.println("swing Motor Turned OFF");
-            Firebase.setString("/Motor", "OFF");
-            
-            Serial.println("Music toy Turned OFF");
-            Firebase.setString("/Music", "OFF");
+//            Serial.println("swing Motor Turned OFF");
+//            Firebase.setString("/Motor", "OFF");
+//            
+//            Serial.println("Music toy Turned OFF");
+//            Firebase.setString("/Music", "OFF");
       }
      
   
