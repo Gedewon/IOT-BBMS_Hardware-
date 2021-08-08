@@ -12,7 +12,7 @@
 #define FIREBASE_AUTH "8Kehg3t6FFuhN5u55vYmmZWZ19T0TjZ0TaYmpydP"
 #define WIFI_SSID "hp"
 #define WIFI_PASSWORD "eSnbJaBp"
-
+//"eSnbJaBp"
   /*
   Define NodeMcu.GPIO pin's for Realy bord for switching actuators
       * swing motor 
@@ -113,9 +113,11 @@ void loop()
   Serial.println("°C ");
   String fireTemp = String(temperature) + String("°C");                  //Temperature integer to string conversion
   delay(100);
-  
- 
-    checkForSound(sound_value);
+
+  String AUTO = Firebase.getString("AUTO");
+
+   if(AUTO == "ON"){   //check if auot pilot is on 
+     checkForSound(sound_value);
 
      ReadfromFirebase();
  
@@ -125,6 +127,13 @@ void loop()
     uploadDataToServer(fireHumid,fireTemp,Sound_Detection);
 
     ReadfromFirebase();
+   }else{
+ReadfromFirebase();
+ uploadDataToServer(fireHumid,fireTemp,Sound_Detection);
+    
+   }
+ 
+   
 
     delay(1000);
   
@@ -220,7 +229,7 @@ void checkForTempartureandHumidity(float temperature,float humidity){
       * is greater than the threashold value's
       * and turn on/off the fun
       */
-      if (temperature >TEMTH || humidity >HTH ) {
+      if (temperature >TEMTH || humidity >HTH ) { 
           Serial.println("Fun Turned ON"); 
           Firebase.setString("/Fan", "ON");  
 
